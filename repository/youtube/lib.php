@@ -57,6 +57,14 @@ class repository_youtube extends repository {
      * @return array
      */
     public function search($search_text, $page = 0) {
+
+        if (isYouTubeUrl($search_text)) {
+            $ret['list'] = $this->_get_item_byId(parser_utils::getVideoId($search_text));
+            $ret['add_frame'] = true;
+            $ret['size'] = 'default_small';
+             return;
+        }
+
         global $SESSION;
         $sort = optional_param('youtube_sort', '', PARAM_TEXT);
         $sess_keyword = 'youtube_'.$this->id.'_keyword';
@@ -92,11 +100,6 @@ class repository_youtube extends repository {
         // If the number of results is smaller than $max, it means we reached the last page.
         $ret['pages'] = (count($ret['list']) < $max) ? $ret['page'] : -1;
 
-        if (isYouTubeUrl($search_text)) {
-            $ret['list'] = $this->_get_item_byId(parser_utils::getVideoId($search_text));
-            $ret['add_frame'] = true;
-            $ret['size'] = 'default_small';
-        }
         return $ret;
     }
 
