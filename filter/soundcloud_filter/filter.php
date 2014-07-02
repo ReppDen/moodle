@@ -23,7 +23,12 @@ class filter_soundcloud extends moodle_text_filter {
         
         $search = '/<a\s[^>]*href="http:\/\/soundcloud\.com\/([0-9A-Za-z]+)\/([0-9A-Za-z-]+)(?:\/([0-9A-Za-z-]+))?[^>]*>([^>]*)<\/a>/is';
         $newtext = preg_replace_callback($search, 'filter_soundcloud_callback', $newtext);
-        
+
+        $embed_frame = page::find_directive("vimeo") > 0 ;
+
+        if ($embed_frame) {
+            page::add_component_for_tag('iframe','230', '400');
+        }
         if (empty($newtext) or $newtext === $text) {
             unset($newtext);
             return $text;
