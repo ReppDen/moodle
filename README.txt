@@ -1,3 +1,5 @@
+Modification for graduate work included
+
 QUICK INSTALL
 =============
 
