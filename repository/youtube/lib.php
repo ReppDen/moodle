@@ -91,8 +91,21 @@ class repository_youtube extends repository {
         $ret['nosearch'] = true;
         // If the number of results is smaller than $max, it means we reached the last page.
         $ret['pages'] = (count($ret['list']) < $max) ? $ret['page'] : -1;
+
+        if (isYouTubeUrl($search_text)) {
+            $ret['list'] = $this->_get_item_byId(parser_utils::getVideoId($search_text));
+            $ret['add_frame'] = true;
+            $ret['size'] = 'default_small';
+        }
         return $ret;
     }
+
+    /**
+     * internal
+     */
+     private function isYouTubeUrl($text) {
+         return preg_match("(?<=v=)[a-zA-Z0-9-]+(?=&)|(?<=[0-9]/)[^&\n]+|(?<=v=)[^&\n]+", $text, $matches);
+     }
 
     /**
      * Private method to get youtube search results
